@@ -1,0 +1,23 @@
+SOURCES = tools.ml ccSyntax.ml ccParser.ml ccLexer.ml main_parser.ml
+CMOS = tools.cmo ccSyntax.cmo ccParser.cmo ccLexer.cmo main_parser.cmo
+CMIS = tools.cmi ccSyntax.cmi ccParser.cmi ccLexer.cmi main_parser.cmi
+TARGET = ccparser
+
+$(TARGET): $(SOURCES) ccParser.mli ccParser.cmi
+	ocamlc $(SOURCES) -o $(TARGET)
+
+ccLexer.ml: ccLexer.mll
+	ocamllex ccLexer.mll
+
+ccParser.ml: ccParser.mly
+	ocamlyacc ccParser.mly
+
+ccParser.mli: ccParser.mly
+	ocamlyacc ccParser.mly
+
+ccParser.cmi: ccParser.mli ccSyntax.ml tools.ml
+	ocamlc -c tools.ml ccSyntax.ml
+	ocamlc -c ccParser.mli
+
+clean: 
+	rm $(CMOS) $(CMIS) ccParser.mli ccLexer.ml ccParser.ml

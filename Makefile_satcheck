@@ -1,0 +1,23 @@
+SOURCES = tools.ml options.ml ccSyntax.ml ccParser.ml ccLexer.ml slSyntax.ml slSatcheck.ml slxSyntax.ml slxSatcheck.ml ccSatcheck.ml main_satcheck.ml
+CMOS = tools.cmo options.cmo ccSyntax.cmo ccParser.cmo ccLexer.cmo slSyntax.cmo slSatcheck.cmo slxSyntax.cmo slxSatcheck.cmo ccSatcheck.cmo main_satcheck.cmo
+CMIS = tools.cmi options.cmi ccSyntax.cmi ccParser.cmi ccLexer.cmi slSyntax.cmi slSatcheck.cmi slxSyntax.cmi slxSatcheck.cmi ccSatcheck.cmi main_satcheck.cmi
+TARGET = ccsatcheck
+
+main: $(SOURCES) ccParser.mli ccParser.cmi
+	ocamlc $(SOURCES) -o $(TARGET)
+
+ccLexer.ml: ccLexer.mll
+	ocamllex ccLexer.mll
+
+ccParser.ml: ccParser.mly
+	ocamlyacc ccParser.mly
+
+ccParser.mli: ccParser.mly
+	ocamlyacc ccParser.mly
+
+ccParser.cmi: ccParser.mli ccSyntax.ml tools.ml
+	ocamlc -c tools.ml ccSyntax.ml
+	ocamlc -c ccParser.mli
+
+clean: 
+	rm $(CMOS) $(CMIS) ccParser.mli ccLexer.ml ccParser.ml
