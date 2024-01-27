@@ -212,8 +212,8 @@ module SplitBranch = struct
 	let curIdx' = setminus maxIdx curIdx in
 	setByIdx c curIdx I;
 	match getByIdx c' curIdx' with
-	| I -> raise BranchFailure
-	| _ -> ()
+	| I ->     raise BranchFailure
+	| _ ->     ()
   ;;
 
   let mkInitPos () = { left = true; idx = []; cnt = 0 }
@@ -414,7 +414,6 @@ let ccMainLoop (dd : IndSys.t) dwand (e,idx) =
                          raise Skip;
                      end;
              end;
-
 			 Opt.sayifDebug @@ "Current state:";
 			 Opt.sayifDebug @@ "a[]: " ^ (SB.to_string_state a1) ^ " (LtoR)";
 			 Opt.sayifDebug @@ "b[]: " ^ (SB.to_string_state_rev b1) ^ " (RtoL)";
@@ -423,7 +422,6 @@ let ccMainLoop (dd : IndSys.t) dwand (e,idx) =
 			 
 			 if !_branchFlag && pos1.SB.cnt = Array.length a1 then raise BranchSuccess else ();
         	 SB.updatePos a1 b1 pos1;
-			 
 			 _ctrlStack := Ctrl.Split(true,ge1,sub,a1,b1,pos1,hstry1) :: !_ctrlStack;
 			 _H := hstry1;
 			 _branchFlag := true
@@ -435,7 +433,7 @@ let ccMainLoop (dd : IndSys.t) dwand (e,idx) =
 		 end
 		   
 	  (* Case Split: Virgin case. The split-branch is handled from now *)
-	  | Ctrl.Split(true,ge1,sub,a1,b1,pos1,hstry1) ->
+	  | Ctrl.Split(true,ge1,sub,a1,b1,pos1,hstry1) ->			          
 		 begin
    		   Opt.sayifDebug @@ "===> Start Operating SplitBranch of " ^ (GrpEntl.to_string_id ge1);
 		   let ge2 = mkSplitAssumpSub ge1 sub pos1 in
@@ -704,18 +702,15 @@ let ccMainLoop (dd : IndSys.t) dwand (e,idx) =
 				 | false ->
 					begin
 					  Opt.sayifDebug @@ "false\n";
-                      print_endline "kuma-1";
 					  let a1 = SB.mkInitState ge in
-                      print_endline "kuma-2";                      
 					  let b1 = SB.mkInitState ge in
-                      print_endline "kuma-3";
 					  let pos1 = SB.mkInitPos () in
-                      print_endline "kuma-4";
                       let sub1 = SB.mkInitSub ge in
-                      print_endline "kuma-5";                      
 					  Opt.sayifDebug @@ "==> Subgoal " ^ (GrpEntl.to_string_id ge) ^ " is pushed to ControlStack\n";
+                if Array.length a1 = 0 then (print_endline "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!"; failwith"");
+                if Array.length b1 = 0 then (print_endline "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB!"; failwith"");
+                      
 					  _ctrlStack := Ctrl.Split(true,ge,sub1,a1,b1,pos1,!_H) :: !_ctrlStack;
-                      print_endline "kuma-6";
 					end
 
 			   with Skip -> () (* Skip_A *)

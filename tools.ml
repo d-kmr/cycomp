@@ -480,6 +480,8 @@ let enumSubsetIndex_old n =
 
 (* new one. enumulate all subsets of [0,..,n-1] *)
 let enumSubsetIndex0 n =
+  (* Special error handling *)
+  if n >= 63 then (print_endline "enumSubsetIndex: Overflow Error. Too large input number (n >= 63)"; failwith "");
   let ( << ) = (lsl) in
   let bitN = 1 << n in
   let _subset = ref [] in
