@@ -704,12 +704,18 @@ let ccMainLoop (dd : IndSys.t) dwand (e,idx) =
 				 | false ->
 					begin
 					  Opt.sayifDebug @@ "false\n";
+                      print_endline "kuma-1";
 					  let a1 = SB.mkInitState ge in
+                      print_endline "kuma-2";                      
 					  let b1 = SB.mkInitState ge in
+                      print_endline "kuma-3";
 					  let pos1 = SB.mkInitPos () in
+                      print_endline "kuma-4";
                       let sub1 = SB.mkInitSub ge in
+                      print_endline "kuma-5";                      
 					  Opt.sayifDebug @@ "==> Subgoal " ^ (GrpEntl.to_string_id ge) ^ " is pushed to ControlStack\n";
 					  _ctrlStack := Ctrl.Split(true,ge,sub1,a1,b1,pos1,!_H) :: !_ctrlStack;
+                      print_endline "kuma-6";
 					end
 
 			   with Skip -> () (* Skip_A *)
@@ -758,7 +764,7 @@ let ccMain (ps : PS.t) =
   for i = 0 to L.length tttYXs - 1 do
 	let h' = SH.clone h in
 	let ttYXs = L.nth tttYXs i in
-	let ttY = L.hd ttYXs in
+	let ttY = h.up @ (L.hd ttYXs) in
 	let ttXs = L.tl ttYXs in
 	h'.SH.gm <- L.map (fun ((g,zz),yy)->(g,dropRed (L.sort T.compare (zz@yy)))) (zipLst h'.SH.gm ttXs);
 	h'.SH.up <- ttY;
